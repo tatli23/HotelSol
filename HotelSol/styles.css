@@ -1,0 +1,21 @@
+.sec1{
+    padding: 10rem;
+    margin: 4rem auto;
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    max-width: 1000px;
+    background: rgba(245, 238, 238, 0.096);
+    
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.062);
+}
+.index{
+    paddinh: 15rem;
+    margin: 4rem auto;
+    flex-direction: center;
+    align-items: center;
+    max-width: 1000px;
+    background: rgba(103, 197, 252, 0.575);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.062);
+
+}
