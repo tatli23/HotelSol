@@ -1,0 +1,232 @@
+/*Diseno de la pantalla de inicio */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
+header {
+  background-color: #17582bd3;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  color: #fcfcfc;
+}
+
+nav {
+  background-color: #17582aab;
+  padding: 10px;
+  text-align: center;
+}
+
+nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #fdfcfc;
+  font-weight: bold;
+}
+
+.hero {
+    padding: 10rem;
+    margin: 4rem auto;
+    display: flex;
+    justify-content: center;  
+    align-items: center;     
+    text-align: center;
+    background: rgba(243, 242, 242, 0.11);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.062);
+    position: relative;
+}
+
+.hero div {
+    max-width: 800px;
+}
+
+.hero h2 {
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: bolder;
+    text-shadow: 2px 2px 4px rgba(37, 37, 37, 0.986); 
+    margin: 0;
+}
+
+.hero p {
+    font-size: 20px;
+    line-height: 1.6;
+    margin-top: 20px;
+    color: rgb(245, 243, 243);
+    text-shadow: 2px 2px 4px rgb(59, 57, 57);
+}
+
+
+section {
+  padding: 20px;
+}
+
+footer {
+  background-color: #17582aab;
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+/*seccion de descripcion sobre los servicios*/
+
+.serv{
+    color: #17582aab;
+    font-size: 35px;
+    font-weight: bolder;
+    margin: 0;
+    text-align: center;
+}
+
+.sec1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  padding: 2em;
+  margin: 0 auto; 
+  margin-top: 60px;
+  background-color: #072e13e7;
+  box-shadow: 5px 5px 15px rgb(44, 78, 41);
+  border-radius: 10px;
+  max-width: 1050px;
+
+}
+
+.habitacion-img {
+  width: 400px;
+  height: auto;
+  border-radius: 10px;
+  image-rendering: auto;
+}
+
+.sec1 h2{
+   color: #ffffff;
+    font-size: 30px;
+    font-weight: bolder;
+    text-shadow: 2px 2px 4px rgba(37, 37, 37, 0.986); 
+    margin: 0;
+}
+
+.sec1 p{
+    font-size: 15px;
+    line-height: 1.6;
+    margin-top: 20px;
+    color: rgb(245, 243, 243);
+    text-shadow: 2px 2px 4px rgb(59, 57, 57);
+
+}
+
+.alberca-img {
+  width: 400px;
+  height: auto;
+  border-radius: 10px;
+  image-rendering: auto;
+}
+
+.actividades-img {
+  width: 400px;
+  height: auto;
+  border-radius: 10px;
+  image-rendering: auto;
+}
+
+.spa-img {
+  width: 400px;
+  height: auto;
+  border-radius: 10px;
+  image-rendering: auto;
+}
+
+.restaurante-img {
+  width: 400px;
+  height: auto;
+  border-radius: 10px;
+  image-rendering: auto;
+}
+
+
+.sec3{
+  padding: 6%;
+  text-align: center;
+}
+
+.index ::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.trvl-media.com/lodging/1000000/430000/425200/425179/4a8c0fa9.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill') no-repeat center center/cover;
+    z-index: -1;
+    opacity: 0.30;
+}
+
+          /*diseño de Galeria*/ 
+
+.galeria-container {
+  margin-top: 40px;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.galeria-container h2 {
+   color: #17582aab;
+    font-size: 35px;
+    font-weight: bolder;
+    margin: 0;
+    text-align: center;
+}
+
+.galeria-cards {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+}
+
+.hospedajes {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  min-width: 250;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0);
+  overflow: hidden;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  transition: transform 0.3s;
+  text-align: center;
+
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-bottom: 1px solid #ccc;
+}
+
+.card p {
+  margin: 10px 0;
+  font-weight: bold;
+  color: #444;
+}
