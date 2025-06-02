@@ -1,0 +1,134 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
+.index ::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.trvl-media.com/lodging/1000000/430000/425200/425179/4a8c0fa9.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill') no-repeat center center/cover;
+    z-index: -1;
+    opacity: 0.30;
+}
+
+header {
+  background-color: #17582bd3;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  color: #fcfcfc;
+}
+
+.menu{
+   color: #17582aab;
+    font-size: 45px;
+    font-weight: bolder;
+    margin: 0;
+    text-align: center;
+}
+
+section {
+  padding: 20px;
+}
+
+section p {
+  color: #03290fea;
+    font-size: 25px;
+    font-weight: bolder;
+    margin: 0;
+    text-align: center;
+}
+
+footer {
+  background-color: #17582aab;
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+.Reg-habitacion {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+select,
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+select:focus,
+input:focus {
+    border-color: #17582aab;
+    outline: none;
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+button.btn {
+    background-color: #17582aab;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button.btn:hover {
+    background-color: #17582aab;
+}
+
+button.btn-secondary {
+    background-color: #808080;
+}
+
+button.btn-secondary:hover {
+    background-color: #666;
+}
+
+#registroMessage {
+    text-align: center;
+    font-weight: bold;
+    color: #17582aab;
+}

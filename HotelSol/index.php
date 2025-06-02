@@ -1,7 +1,4 @@
-<?php
-include 'db_connection.php';
-session_start();
-?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -20,8 +17,8 @@ session_start();
 
   <nav>
     <a href="index.php">Inicio</a>
-    <a href="Reserva.php">Reservar</a>
-    <a href="habitaciones">Iniciar Sesion</a>
+    <a href="registro.php">Iniciar Sesion</a>
+   
   </nav>
 
   <section class='hero'>
@@ -33,7 +30,7 @@ session_start();
     
   <section>
     <div >
-      <h2 class="serv"><strong>Servisios</strong></h2>
+      <h2 class="serv"><strong>Servicios</strong></h2>
     </div>
   </section>
 

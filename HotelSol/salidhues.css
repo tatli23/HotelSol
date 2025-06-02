@@ -1,0 +1,140 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #000000;
+}
+
+.index ::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://images.trvl-media.com/lodging/1000000/430000/425200/425179/4a8c0fa9.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill') no-repeat center center/cover;
+    z-index: -1;
+    opacity: 0.30;
+}
+
+header {
+  background-color: #17582bd3;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  color: #fcfcfc;
+}
+
+.menu{
+   color: #17582aab;
+    font-size: 45px;
+    font-weight: bolder;
+    margin: 0;
+    text-align: center;
+}
+
+section {
+  padding: 20px;
+}
+
+section p {
+  color: #03290fea;
+    font-size: 25px;
+    font-weight: bolder;
+    margin: 0;
+    text-align: center;
+}
+
+footer {
+  background-color: #17582aab;
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+
+.module-screen {
+  max-width: 600px;
+  margin: auto;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+select,
+input[type="checkbox"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#guestInfo {
+  background: #f1f5f9;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+#guestInfo h4 {
+  margin-top: 0;
+  color: #3a5a40;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+.btn {
+  background-color: #52796f;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #3a5a40;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+@media (max-width: 600px) {
+  .navigation {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
