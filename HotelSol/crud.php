@@ -93,19 +93,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isFetchRequest()) {
        .user-management {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      gap: 3rem;
       margin-top: 20px;
     }
     
     .user-form {
       background: #f8f9fa;
-      padding: 20px;
+      padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(17,58,2,0.1);
     }
     
     .user-list-container {
       background: #f8f9fa;
+      
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -163,7 +164,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isFetchRequest()) {
         grid-template-columns: 1fr;
       }
     }
+
+     table {
+      width: 100%; border-collapse: collapse; margin-top: 30px;
+      background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+    th, td {
+      padding: 12px 15px; border: 1px solid #ddd; text-align: left;
+    }
+    th {
+      background-color: #17582bd3; color: white;
+      font-weight: normal;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  
   </style>
 </head>
 <body class= "index">
@@ -172,12 +188,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isFetchRequest()) {
      <h1>Hotel el Sol</h1>
     </header>
 
-    <section>
-    <div>
-      <h2 class="menu"><strong>Gestión de Usuarios </strong></h2>
+      <section class='hero'>
+    <div >
+      <h2>Gestión de Usuarios</h2>
+      <p><strong></strong></p>
     </div>
   </section>
-<div   class="module-screen" >
+
+    
+<section   class="module-screen" >
     <div class="user-form">
   <h2>Agregar Usuario</h2>
   <formid="addUserForm">
@@ -202,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isFetchRequest()) {
 
   <p id="message"></p>
 
-  <div class="user-list-container" >
+  <div >
   <h2>Lista de Usuarios</h2>
   <table id="usersTable">
     <thead>
@@ -219,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isFetchRequest()) {
   <div class="navigation">
             <button class="btn btn-secondary" onclick="window.location.href='administrador.php'">Regresar</button>
         </div>
-</div>
+</section>
 
           
 
@@ -313,5 +332,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isFetchRequest()) {
       };
     });
   </script>
+
+   <footer>
+    <p>&copy; <?php echo date("Y"); ?> Hotel Sol. Todos los derechos reservados.</p>
+  </footer>
+
 </body>
 </html>

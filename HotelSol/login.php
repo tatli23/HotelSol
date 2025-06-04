@@ -70,6 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button  class="user-type-btn" onclick="window.location.href='sesadmin.php'">
                     Administrador
                 </button>
+                
+                <button class="user-type-btn" onclick="window.location.href='index.php'">
+                    Regresar
+                </button>
+        
             </div>
         </div>
 
@@ -169,5 +174,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
     </script>
+
 </body>
 </html>

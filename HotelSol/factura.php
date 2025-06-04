@@ -136,6 +136,9 @@ Hotel "El Sol"
 
     document.addEventListener('DOMContentLoaded', loadInvoiceOptions);
   </script>
+ <footer>
+    <p>&copy; <?php echo date("Y"); ?> Hotel Sol. Todos los derechos reservados.</p>
+  </footer>
 
         
 </body>

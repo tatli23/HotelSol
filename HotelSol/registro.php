@@ -124,6 +124,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ¡Únete a nuestra familia de huéspedes distinguidos y disfruta de beneficios exclusivos!
             </div >
             <a href="login.php" class="login-link">¿Ya tienes cuenta? Iniciar Sesión</a>
+            <button class="login-link" onclick="window.location.href='index.php'">
+                    Regresar
+            </button>
             
 
         </div>
@@ -246,6 +249,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         e.target.value = value;
     });
 </script>
+
+
 
 </body>
 </html>

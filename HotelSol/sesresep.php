@@ -19,10 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$input_usuario]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-       if ($result && $input_password === $result['password']) {
+       if ($result && password_verify($input_password, $result['password']))
+ {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_id'] = $result['id_usuario'];
-            $_SESSION['admin_username'] = $result['usuario'];
+            $_SESSION['admin_username'] = $result['nombre_usuario'];
 
             header('Location: recepcionista.php');
             exit();
@@ -161,5 +162,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
     </script>
+
 </body>
 </html>

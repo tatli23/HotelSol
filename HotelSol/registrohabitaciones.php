@@ -206,5 +206,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       document.getElementById('totalPagar').value = `$${total.toFixed(2)}`;
     }
   </script>
+
+   <footer>
+    <p>&copy; <?php echo date("Y"); ?> Hotel Sol. Todos los derechos reservados.</p>
+  </footer>
+
 </body>
 </html>

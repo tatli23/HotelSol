@@ -138,3 +138,35 @@ input[type="checkbox"] {
     width: 100%;
   }
 }
+
+.hero {
+    padding: 10rem;
+    margin: 4rem auto;
+    display: flex;
+    justify-content: center;  
+    align-items: center;     
+    text-align: center;
+    background: rgba(243, 242, 242, 0.11);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.062);
+    position: relative;
+}
+
+.hero div {
+    max-width: 800px;
+}
+
+.hero h2 {
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: bolder;
+    text-shadow: 2px 2px 4px rgba(37, 37, 37, 0.986); 
+    margin: 0;
+}
+
+.hero p {
+    font-size: 20px;
+    line-height: 1.6;
+    margin-top: 20px;
+    color: rgb(245, 243, 243);
+    text-shadow: 2px 2px 4px rgb(59, 57, 57);
+}

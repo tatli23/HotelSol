@@ -276,5 +276,10 @@ if (isset($_GET['get_guest_info']) && isset($_GET['habitacion'])) {
             });
         });
     </script>
+
+     <footer>
+    <p>&copy; <?php echo date("Y"); ?> Hotel Sol. Todos los derechos reservados.</p>
+  </footer>
+
 </body>
 </html>
