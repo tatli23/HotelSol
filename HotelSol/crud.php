@@ -2,78 +2,173 @@
 include 'db_connection.php';
 session_start();
 
+function isFetchRequest() {
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+}
 
-$action = $_POST['action'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isFetchRequest()) {
+    header('Content-Type: application/json');
+    $response = ['success' => false, 'message' => ''];
 
-if ($action === 'add') {
-    $nombre_usuario = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-    $rol = $_POST['role'] ?? '';
+    $action = $_POST['action'] ?? '';
 
-    if ($nombre_usuario && $password && $rol) {
-        $tipo = ($rol === 'admin') ? 1 : 2;
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    switch ($action) {
+        case 'add':
+            $username = trim($_POST['username'] ?? '');
+            $password = trim($_POST['password'] ?? '');
+            $role = trim($_POST['role'] ?? '');
 
-        try {
-            $stmt = $pdo->prepare("INSERT INTO usuario (nombre_usuario, password, tipo, fecha_registro) VALUES (?, ?, ?, NOW())");
-            if ($stmt->execute([$nombre_usuario, $hashedPassword, $tipo])) {
-                echo json_encode(["success" => true, "message" => "Usuario creado exitosamente."]);
+            if (empty($username) || empty($password) || empty($role)) {
+                $response['message'] = 'Todos los campos son obligatorios.';
             } else {
-                echo json_encode(["success" => false, "message" => "Error al insertar usuario."]);
-            }
-        } catch (PDOException $e) {
-            echo json_encode(["success" => false, "message" => "Error: " . $e->getMessage()]);
-        }
-    } else {
-        echo json_encode(["success" => false, "message" => "Faltan datos."]);
-    }
+                try {
+                    $stmt = $pdo->prepare("SELECT id_usuario FROM usuario WHERE nombre_usuario = ?");
+                    $stmt->execute([$username]);
 
-} elseif ($action === 'delete') {
-    $id = $_POST['id'] ?? '';
-    if ($id) {
-        try {
-            $stmt = $pdo->prepare("DELETE FROM usuario WHERE id_usuario = ?");
-            if ($stmt->execute([$id])) {
-                echo json_encode(["success" => true, "message" => "Usuario eliminado."]);
+                    if ($stmt->rowCount() > 0) {
+                        $response['message'] = 'El nombre de usuario ya está en uso.';
+                    } else {
+                        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                        $stmt = $pdo->prepare("INSERT INTO usuario (nombre_usuario, tipo, password) VALUES (?, ?, ?)");
+                        $stmt->execute([$username, $role, $hashedPassword]);
+
+                        $response['success'] = true;
+                        $response['message'] = 'Usuario agregado exitosamente.';
+                    }
+                } catch (PDOException $e) {
+                    $response['message'] = 'Error en base de datos: ' . $e->getMessage();
+                }
+            }
+            break;
+
+        case 'delete':
+            $userId = intval($_POST['userId'] ?? 0);
+            if ($userId <= 0) {
+                $response['message'] = 'ID de usuario inválido.';
             } else {
-                echo json_encode(["success" => false, "message" => "Error al eliminar usuario."]);
+                try {
+                    $stmt = $pdo->prepare("DELETE FROM usuario WHERE id_usuario = ?");
+                    $stmt->execute([$userId]);
+
+                    if ($stmt->rowCount() > 0) {
+                        $response['success'] = true;
+                        $response['message'] = 'Usuario eliminado correctamente.';
+                    } else {
+                        $response['message'] = 'Usuario no encontrado.';
+                    }
+                } catch (PDOException $e) {
+                    $response['message'] = 'Error al eliminar: ' . $e->getMessage();
+                }
             }
-        } catch (PDOException $e) {
-            echo json_encode(["success" => false, "message" => "Error: " . $e->getMessage()]);
-        }
-    } else {
-        echo json_encode(["success" => false, "message" => "ID no válido."]);
+            break;
+
+        case 'list':
+            try {
+                $stmt = $pdo->query("SELECT id_usuario, nombre_usuario, tipo AS rol FROM usuario");
+                $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $response['success'] = true;
+                $response['users'] = $users;
+            } catch (PDOException $e) {
+                $response['message'] = 'Error al listar usuarios: ' . $e->getMessage();
+            }
+            break;
+
+        default:
+            $response['message'] = 'Acción no válida.';
     }
 
-} elseif ($action === 'list') {
-    try {
-        $stmt = $pdo->query("SELECT id_usuario, nombre_usuario, tipo FROM usuario");
-        $usuarios = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $row['rol'] = ($row['tipo'] == 1) ? 'Administrador' : 'Recepcionista';
-            $usuarios[] = $row;
-        }
-        echo json_encode(["success" => true, "users" => $usuarios]);
-    } catch (PDOException $e) {
-        echo json_encode(["success" => false, "message" => "Error: " . $e->getMessage()]);
-    }
+    echo json_encode($response);
+    exit;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hotel Sol</title>
-  <link rel="stylesheet" href="salidhues.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Sol</title>
+    <link rel="stylesheet" href="salidhues.css">
+  <style>
+       .user-management {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 20px;
+    }
+    
+    .user-form {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .user-list-container {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .user-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    
+    .user-table th, .user-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .user-table th {
+      background-color: #17582aab;
+      color: white;
+    }
+    
+    .user-table tr:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+    
+    .message-success {
+      color: #28a745;
+      background-color: #d4edda;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+      text-align: center;
+    }
+    
+    .message-error {
+      color: #dc3545;
+      background-color: #f8d7da;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+      text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      .user-management {
+        grid-template-columns: 1fr;
+      }
+    }
+    }
+  </style>
 </head>
+<body class= "index">
 
-<body class="index">
-
-    <header>
+<header>
      <h1>Hotel el Sol</h1>
     </header>
 
@@ -82,38 +177,141 @@ if ($action === 'add') {
       <h2 class="menu"><strong>Gestión de Usuarios </strong></h2>
     </div>
   </section>
-
-<div class="module-screen" id="usuarios">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                <div>
-                    <h3>Agregar Usuario</h3>
-                    <div class="form-group">
-                        <label>Usuario:</label>
-                        <input type="text" id="newUsername" placeholder="Nombre de usuario">
-                    </div>
-                    <div class="form-group">
-                        <label>Contraseña:</label>
-                        <input type="password" id="newPassword" placeholder="Contraseña">
-                    </div>
-                    <div class="form-group">
-                        <label>Rol:</label>
-                        <select id="newRole">
-                            <option value="recepcionista">Recepcionista</option>
-                            <option value="admin">Administrador</option>
-                        </select>
-                    </div>
-                    <button class="btn" onclick="addUser()">Agregar Usuario</button>
-                </div>
-                <div>
-                    <h3>Usuarios del Sistema</h3>
-                    <div id="usersList" class="user-list"></div>
-                </div>
-            </div>
-            <div id="userMessage" style="margin: 1rem 0;"></div>
-            <div class="navigation">
-                <button class="btn btn-secondary" onclick="window.location.href='administrador.php'">Regresar</button>
-            </div>
-        </div>
+<div   class="module-screen" >
+    <div class="user-form">
+  <h2>Agregar Usuario</h2>
+  <formid="addUserForm">
+    <label>Nombre de usuario:
+      <input type="text" id="username" required />
+    </label>
+    <label>Contraseña:
+      <input type="password" id="password" required />
+    </label>
+    <label>Rol:
+      <select  class="form-control" id="role" required> 
+        <option value="">Seleccionar</option>
+        <option value="admin">Administrador</option>
+        <option value="recepcionista">Recepcionista</option>
+      </select>
+    </label>
+    <button class="btn"  type="submit">Agregar</button>
+  </form>
+  </formid>
     </div>
+
+
+  <p id="message"></p>
+
+  <div class="user-list-container" >
+  <h2>Lista de Usuarios</h2>
+  <table id="usersTable">
+    <thead>
+      <tr>
+        <!--<th>ID</th>-->
+        <th>Nombre de Usuario</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  </div>
+  <div class="navigation">
+            <button class="btn btn-secondary" onclick="window.location.href='administrador.php'">Regresar</button>
+        </div>
+</div>
+
+          
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('addUserForm');
+      const message = document.getElementById('message');
+      const tableBody = document.querySelector('#usersTable tbody');
+
+      loadUsers();
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const role = document.getElementById('role').value;
+
+        fetch('crud.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: new URLSearchParams({
+            action: 'add',
+            username,
+            password,
+            role
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          message.textContent = data.message;
+          message.className = data.success ? 'success' : 'error';
+          if (data.success) {
+            form.reset();
+            loadUsers();
+          }
+        });
+      });
+
+      function loadUsers() {
+        fetch('crud.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: new URLSearchParams({ action: 'list' })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            tableBody.innerHTML = '';
+            data.users.forEach(user => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                
+                <td>${user.nombre_usuario}</td>
+                <td>${user.rol}</td>
+                <td><button onclick="deleteUser(${user.id_usuario})">Eliminar</button></td>
+              `;
+              tableBody.appendChild(row);
+            });
+          }
+        });
+      }
+
+      window.deleteUser = function (userId) {
+        if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
+
+        fetch('crud.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: new URLSearchParams({
+            action: 'delete',
+            userId
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          message.textContent = data.message;
+          message.className = data.success ? 'success' : 'error';
+          if (data.success) {
+            loadUsers();
+          }
+        });
+      };
+    });
+  </script>
 </body>
 </html>

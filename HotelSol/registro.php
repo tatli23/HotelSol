@@ -1,9 +1,10 @@
 <?php
-include 'db_connection.php'; // Se asume que define $pdo
+include 'db_connection.php';
 session_start();
 
 $success = false;
 $error = '';
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = trim($_POST['nombre']);
@@ -14,7 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
-    // Validaciones básicas
+    // Debug: Verificar qué datos llegan
+    $debug_info[] = "Datos recibidos: " . json_encode([
+        'nombre' => $nombre,
+        'apellidos' => $apellidos, 
+        'email' => $email,
+        'telefono' => $telefono,
+        'fecha_nacimiento' => $fecha_nacimiento
+    ]);
+
+    // Validaciones
     if (empty($nombre) || empty($apellidos) || empty($email) || empty($telefono) || empty($fecha_nacimiento) || empty($password) || empty($confirm_password)) {
         $error = "Por favor, completa todos los campos obligatorios.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -25,26 +35,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "La contraseña debe tener al menos 8 caracteres.";
     } else {
         try {
-            // Verificar si el correo ya está registrado
-            $query = "SELECT id FROM Cliente WHERE email = ?";
+            // Debug: Verificar conexión a BD
+            $debug_info[] = "Conexión a BD establecida correctamente";
+            
+            // Verificar que el correo o teléfono no estén registrados
+            $query = "SELECT id_cliente FROM cliente WHERE email = ? OR num_telefono = ?";
             $stmt = $pdo->prepare($query);
-            $stmt->execute([$email]);
+            $stmt->execute([$email, $telefono]);
+
+            $debug_info[] = "Query de verificación ejecutada. Filas encontradas: " . $stmt->rowCount();
 
             if ($stmt->rowCount() > 0) {
-                $error = "El correo ya está registrado. Usa otro.";
+                $error = "Ya existe una cuenta registrada con este correo o teléfono.";
             } else {
-                // Insertar nuevo usuario
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-                $insert = "INSERT INTO cliente (nombre, apellidos, email, telefono, fecha_nacimiento, password) VALUES (?, ?, ?, ?, ?, ?)";
+                
+                // Debug: Verificar hash de contraseña
+                $debug_info[] = "Contraseña hasheada correctamente";
+                
+                $insert = "INSERT INTO cliente (nombre, apellidos, email, num_telefono, fecha_nacimiento, password) 
+                           VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt = $pdo->prepare($insert);
-                $success = $stmt->execute([$nombre, $apellidos, $email, $telefono, $fecha_nacimiento, $hashed_password]);
+                
+                // Debug: Preparar statement
+                $debug_info[] = "Statement preparado correctamente";
+                
+                $result = $stmt->execute([
+                    $nombre, $apellidos, $email, $telefono, $fecha_nacimiento, $hashed_password
+                ]);
 
-                if (!$success) {
-                    $error = "Error al registrar usuario.";
+                // Debug: Verificar resultado de ejecución
+                $debug_info[] = "Resultado de execute(): " . ($result ? 'true' : 'false');
+                $debug_info[] = "Filas afectadas: " . $stmt->rowCount();
+                $debug_info[] = "Último ID insertado: " . $pdo->lastInsertId();
+
+                if ($result && $stmt->rowCount() > 0) {
+                    $success = true;
+                    $debug_info[] = "¡Registro exitoso!";
+                } else {
+                    $error = "Error al registrar usuario. No se insertaron datos.";
+                    $debug_info[] = "ERROR: No se insertaron filas en la base de datos";
                 }
             }
         } catch (PDOException $e) {
-            $error = "Error de base de datos: " . $e->getMessage();
+            $error = "Error en la base de datos: " . $e->getMessage();
+            $debug_info[] = "ERROR PDO: " . $e->getMessage();
+            $debug_info[] = "Código de error: " . $e->getCode();
         }
     }
 }
@@ -56,14 +92,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Hotel Sol - Registro</title>
     <link rel="stylesheet" href="registro.css"/>
+    <style>
+        .debug-info {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .debug-info h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .debug-item {
+            margin: 5px 0;
+            color: #666;
+        }
+    </style>
 </head>
 
 <body>
-    <?php if ($success): ?>
-        <div class="success-message">¡Registro exitoso! Ahora puedes <a href="login.php">iniciar sesión</a>.</div>
-    <?php elseif ($error): ?>
-        <div class="error-message"><?= $error ?></div>
-    <?php endif; ?>
+
 
     <div class="container">
         <div class="left-panel">
@@ -71,8 +122,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="hotel-tagline">Tu experiencia de lujo te espera</p>
             <div class="welcome-text">
                 ¡Únete a nuestra familia de huéspedes distinguidos y disfruta de beneficios exclusivos!
-            </div>
+            </div >
             <a href="login.php" class="login-link">¿Ya tienes cuenta? Iniciar Sesión</a>
+            
+
         </div>
 
         <div class="right-panel">
@@ -83,27 +136,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Nombre</label>
-                        <input type="text" class="form-input" name="nombre" required>
+                        <input type="text" class="form-input" name="nombre" value="<?= htmlspecialchars($_POST['nombre'] ?? '') ?>" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Apellidos</label>
-                        <input type="text" class="form-input" name="apellidos" required>
+                        <input type="text" class="form-input" name="apellidos" value="<?= htmlspecialchars($_POST['apellidos'] ?? '') ?>" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-input" name="email" required>
+                    <input type="email" class="form-input" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Teléfono</label>
-                        <input type="tel" class="form-input" name="telefono" required>
+                        <input type="tel" class="form-input" name="telefono" value="<?= htmlspecialchars($_POST['telefono'] ?? '') ?>" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Fecha de Nacimiento</label>
-                        <input type="date" class="form-input" name="fecha_nacimiento" required>
+                        <input type="date" class="form-input" name="fecha_nacimiento" value="<?= htmlspecialchars($_POST['fecha_nacimiento'] ?? '') ?>" required>
                     </div>
                 </div>
 

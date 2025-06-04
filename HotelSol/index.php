@@ -18,6 +18,7 @@
   <nav>
     <a href="index.php">Inicio</a>
     <a href="registro.php">Iniciar Sesion</a>
+    <a href="recepcionista.php">Recep</a>
    
   </nav>
 
