@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div class="navigation">
       <button type="submit" class="btn">Registrar Habitación</button>
-      <button class="btn btn-secondary" type="button" onclick="window.location.href='administrador.php'">Regresar</button>
+      <button class="btn btn-secondary" type="button" onclick="window.location.href='index.php'">Regresar</button>
     </div>
   </form>
 

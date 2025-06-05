@@ -40,7 +40,7 @@ session_start();
      <div class="container">
          <div class="main-menu" id="mainMenu">
             <div class="menu-grid">
-                <a class="menu-item" href="habitaciones.php">
+                <a class="menu-item" href="Habitaciones.php">
                     <h3>🔍 Consulta de Habitaciones</h3>
                     <p>Ver disponibilidad de habitaciones</p>
                 </a>
@@ -48,7 +48,7 @@ session_start();
                     <h3>📝 Registro de Habitación</h3>
                     <p>Registrar nuevos huéspedes</p>
                 </a>
-                <a class="menu-item" href="salidahuesped.php">
+                <a class="menu-item" href="salidhuesped.php">
                     <h3>🚪 Salida de Huéspedes</h3>
                     <p>Procesar check-out</p>
                 </a>

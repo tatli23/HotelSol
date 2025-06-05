@@ -199,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isFetchRequest()) {
 <section   class="module-screen" >
     <div class="user-form">
   <h2>Agregar Usuario</h2>
-  <formid="addUserForm">
+  <form id="addUserForm">
     <label>Nombre de usuario:
       <input type="text" id="username" required />
     </label>

@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             error_log("Contraseña verificada correctamente");
             $_SESSION['user_id'] = $usuario_db['id_cliente'];
             $_SESSION['email'] = $usuario_db['email'];
-            header("Location: Reserva.php");
+            header("Location: Cregistrohabitaciones.php");
             exit();
         } else {
             // Verificar si la contraseña está en texto plano (solo para debug)
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 error_log("ADVERTENCIA: La contraseña está en texto plano en la BD");
                 $_SESSION['user_id'] = $usuario_db['id_cliente'];
                 $_SESSION['email'] = $usuario_db['email'];
-                header("Location: Reserva.php");
+                header("Location: Cregistrohabitaciones.php");
                 exit();
             } else {
                 error_log("Fallo en verificación de contraseña");
